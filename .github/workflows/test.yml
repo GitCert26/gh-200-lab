@@ -1,34 +1,23 @@
-name: Real CI Pipeline
+name: Artifact Demo
 
 on: push
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Create a file
+        run: echo "Hello from GH-200 artifact demo" > demo.txt
+
+      - name: Show file content
+        run: cat demo.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
         with:
-          node-version: 18
-
-      - name: Check Node version
-        run: node -v
-
-      - name: Run simple test
-        run: |
-          echo "Running tests..."
-          echo "All tests passed!"
-
-      - name: Print env variable
-        run: echo "My app name is $APP_NAME"
-        env:
-            APP_NAME: GH200-LAB
-
-      - name: Use secret
-        run: echo "Secret is hidden but accessible"
-        env:
-           SECRET_VALUE: ${{ secrets.MY_SECRET }}
+          name: my-demo-file
+          path: demo.txt
