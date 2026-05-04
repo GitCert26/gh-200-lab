@@ -22,3 +22,8 @@ jobs:
         run: |
           echo "Running tests..."
           echo "All tests passed!"
+
+      - name: Print env variable
+        run: echo "My app name is $APP_NAME"
+        env:
+            APP_NAME: GH200-LAB
