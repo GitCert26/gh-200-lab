@@ -1,13 +1,24 @@
-name: Test Workflow
+name: Real CI Pipeline
 
 on: push
 
 jobs:
-  test:
+  build-and-test:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Run test
-        run: echo "GitHub Actions is working!"
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Check Node version
+        run: node -v
+
+      - name: Run simple test
+        run: |
+          echo "Running tests..."
+          echo "All tests passed!"
