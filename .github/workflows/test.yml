@@ -1,23 +1,17 @@
-name: Matrix Build Demo
+name: Failure Handling Demo
 
 on: push
 
 jobs:
-  test:
+  demo:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [16, 18, 20]
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Step 1 (Success)
+        run: echo "This will pass"
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
+      - name: Step 2 (Fail intentionally)
+        run: exit 1
 
-      - name: Show Node version
-        run: node -v
+      - name: Step 3 (Should it run?)
+        run: echo "This depends on failure behavior"
