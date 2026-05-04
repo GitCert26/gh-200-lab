@@ -1,23 +1,23 @@
-name: Artifact Demo
+name: Matrix Build Demo
 
 on: push
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16, 18, 20]
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create a file
-        run: echo "Hello from GH-200 artifact demo" > demo.txt
-
-      - name: Show file content
-        run: cat demo.txt
-
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
-          name: my-demo-file
-          path: demo.txt
+          node-version: ${{ matrix.node-version }}
+
+      - name: Show Node version
+        run: node -v
