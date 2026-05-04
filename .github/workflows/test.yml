@@ -27,3 +27,8 @@ jobs:
         run: echo "My app name is $APP_NAME"
         env:
             APP_NAME: GH200-LAB
+
+      - name: Use secret
+        run: echo "Secret is hidden but accessible"
+        env:
+           SECRET_VALUE: ${{ secrets.MY_SECRET }}
