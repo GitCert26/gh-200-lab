@@ -1,17 +1,48 @@
 name: Failure Handling Demo
 
-on: push
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log Level'
+        required: true
+        default: 'warning'
+      tags:
+        description: 'Test Scenario'
+        required: false
 
 jobs:
   demo:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Step 1 (Success)
-        run: echo "This will pass"
+      - name: Print Inputs
+        run: |
+          echo "Log Level: ${{ github.event.inputs.logLevel }}"
+          echo "Tags: ${{ github.event.inputs.tags }}"
 
-      - name: Step 2 (Fail intentionally)
-        run: exit 1
+      - name: Conditional Logging
+        run: |
+          if [ "${{ github.event.inputs.logLevel }}" = "error" ]; then
+            echo "🚨 Error level selected"
+          elif [ "${{ github.event.inputs.logLevel }}" = "warning" ]; then
+            echo "⚠️ Warning level selected"
+          else
+            echo "ℹ️ Info level selected"
+          fi
 
-      - name: Step 3 (Should it run?)
-        run: echo "This depends on failure behavior"
+      - name: Simulate Failure
+        if: ${{ github.event.inputs.tags == 'fail' }}
+        run: |
+          echo "Simulating failure..."
+          exit 1
+
+      - name: Runs Only If Previous Step Failed
+        if: failure()
+        run: |
+          echo "Handling failure gracefully..."
+
+      - name: Runs Only If Success
+        if: success()
+        run: |
+          echo "Workflow completed successfully!"
